@@ -1,0 +1,74 @@
+foundry_schema: 1
+pipeline:
+  pipeline_uuid: a04e9f4b6475447ba741d391d0ffd428
+  pipeline_rev_uuid: a9f97175710a4e97ad33a4eb86394b92
+  rev: 0
+  name: gitmod_proof_m
+  summary: git-3-3 modules live proof fixture
+  script:
+    pipe_header: ""
+    pipe_footer: ""
+    mode_header: ""
+    mode_footer: ""
+    config: // git-3-3 modules live proof
+  main_g:
+    - 0
+    - 0
+    - 1
+pins:
+  p1:
+    process_uuid: bc525de0319a4479961c3520955c893f
+    process_rev_uuid: 8b6688ccf45643df931a542dc7ed2054
+    content_hash: sha256:eaad817b8866bcd695919e94697769e126649b7a42af1dde644367ff2138d442
+    repo_path: gitmod-proof-a-bc525de0
+    tag: foundry/gitmod-proof-a-bc525de0/rev-0
+  p2:
+    process_uuid: 9314c3a3d26e4463b09d32402984efe7
+    process_rev_uuid: 3ede385cd58f42989ca2569e279a582a
+    content_hash: sha256:0be427911f5525f510ee845eb70f0262516f338f35500196e8506c945dafeb7d
+    repo_path: gitmod-proof-b-9314c3a3
+    tag: foundry/gitmod-proof-b-9314c3a3/rev-0
+nodes:
+  g-0:
+    x: 0
+    y: 0
+    label: value
+    settings: {}
+    io: in
+  g-1:
+    x: 200
+    y: 0
+    label: proof_a
+    settings: {}
+    process: p1
+  g-2:
+    x: 200
+    y: 150
+    label: proof_b
+    settings: {}
+    process: p2
+  g-3:
+    x: 400
+    y: 150
+    label: b_result
+    settings: {}
+    io: out
+edges:
+  - from:
+      node: g-0
+      slot: 0
+    to:
+      node: g-1
+      port: fixture_value
+  - from:
+      node: g-0
+      slot: 0
+    to:
+      node: g-2
+      port: fixture_value
+  - from:
+      node: g-2
+      port: fixture_result
+    to:
+      node: g-3
+      slot: 0
