@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "gitmod_proof_c outputs",
+  "type": "object",
+  "properties": {
+    "fixture_final": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fixture_final"
+  ],
+  "additionalProperties": false
+}

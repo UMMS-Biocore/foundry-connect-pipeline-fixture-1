@@ -1,0 +1,53 @@
+schema_version: 1.1.0
+process:
+  name: gitmod_proof_c
+  summary: git-3-3 modules live proof fixture
+  script:
+    language: bash
+    body: |
+      cat ${infile} > final.txt
+      echo done >> final.txt
+inputs:
+  - id: fixture_result
+    role: input
+    type: string
+    cardinality: single
+    required: true
+    artifact:
+      kind: file
+      file_type: txt
+outputs:
+  - id: fixture_final
+    role: output
+    type: string
+    cardinality: single
+    required: true
+    artifact:
+      kind: file
+      file_type: txt
+orchestration:
+  nextflow:
+    backend_version: unspecified
+    directives: {}
+    ports:
+      fixture_result:
+        role: input
+        qualifier: file
+        channel_decl: infile
+        operator: ''
+        closure: ''
+        reg_ex: ''
+      fixture_final:
+        role: output
+        qualifier: file
+        channel_decl: "'final.txt'"
+        operator: ''
+        closure: ''
+        reg_ex: ''
+x-via-fidelity:
+  source: legacy-lift
+  generator_version: contract-lift-1.1.0
+  level: strict
+  notes:
+    - 'nextflow backend_version unspecified: legacy processes carry no version'
+  ports: {}
