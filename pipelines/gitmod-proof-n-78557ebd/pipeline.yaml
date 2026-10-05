@@ -1,0 +1,57 @@
+foundry_schema: 1
+pipeline:
+  pipeline_uuid: 78557ebd596843b4b7ce266d9060a7c7
+  pipeline_rev_uuid: 840e991581fe448f910acfce4c7e51ad
+  rev: 0
+  name: gitmod_proof_n
+  summary: git-3-3 modules live proof fixture
+  script:
+    pipe_header: ""
+    pipe_footer: ""
+    mode_header: ""
+    mode_footer: ""
+    config: // git-3-3 modules live proof
+  main_g:
+    - 0
+    - 0
+    - 1
+modules:
+  m1:
+    pipeline_uuid: a04e9f4b6475447ba741d391d0ffd428
+    pipeline_rev_uuid: a9f97175710a4e97ad33a4eb86394b92
+    content_hash: sha256:7627052bd38be4d518325c5629f941a14b7fd29aadbfd816f2d10d0ec8d0bf47
+    slug: gitmod-proof-m-a04e9f4b
+    tag: foundry/pipelines/gitmod-proof-m-a04e9f4b/rev-0
+pins: {}
+nodes:
+  g-0:
+    x: 0
+    y: 0
+    label: value
+    settings: {}
+    io: in
+  g-1:
+    x: 200
+    y: 0
+    label: module_m
+    settings: {}
+    module: m1
+  g-2:
+    x: 400
+    y: 0
+    label: n_result
+    settings: {}
+    io: out
+edges:
+  - from:
+      node: g-0
+      slot: 0
+    to:
+      node: g-1
+      module_port: g-0
+  - from:
+      node: g-1
+      module_port: g-3
+    to:
+      node: g-2
+      slot: 0
