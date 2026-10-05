@@ -1,0 +1,53 @@
+schema_version: 1.1.0
+process:
+  name: gitmod_proof_a
+  summary: git-3-3 modules live proof fixture
+  script:
+    language: bash
+    body: |
+      echo "a ${value}" > a.txt
+inputs:
+  - id: fixture_value
+    role: input
+    type: string
+    cardinality: single
+    required: true
+    artifact: null
+outputs:
+  - id: fixture_result
+    role: output
+    type: string
+    cardinality: single
+    required: true
+    artifact:
+      kind: file
+      file_type: txt
+orchestration:
+  nextflow:
+    backend_version: unspecified
+    directives: {}
+    ports:
+      fixture_value:
+        role: input
+        qualifier: val
+        channel_decl: value
+        operator: ''
+        closure: ''
+        reg_ex: ''
+      fixture_result:
+        role: output
+        qualifier: file
+        channel_decl: "'a.txt'"
+        operator: ''
+        closure: ''
+        reg_ex: ''
+x-via-fidelity:
+  source: legacy-lift
+  generator_version: contract-lift-1.1.0
+  level: loose
+  notes:
+    - value ports typed as string; no enum, range, or default recoverable from legacy
+    - 'nextflow backend_version unspecified: legacy processes carry no version'
+  ports:
+    fixture_value:
+      - no-enum-range-or-default
