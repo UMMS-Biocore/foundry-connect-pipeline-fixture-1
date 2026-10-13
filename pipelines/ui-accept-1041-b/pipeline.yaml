@@ -1,0 +1,167 @@
+foundry_schema: 1
+pipeline:
+  pipeline_uuid: e9b9f7036d0946d482088947679a61f1
+  pipeline_rev_uuid: a98499d4b02844859817aa5a9e296cf9
+  rev: 0
+  name: Edit Chromosome Names_copy
+  summary: ""
+  script:
+    pipe_header: ""
+    pipe_footer: ""
+    mode_header: groovy
+    mode_footer: groovy
+    config: |
+      
+      //~@:~
+      @~:"bin/edit_chromosomes.py"
+      //~@:~
+      #!/usr/bin/env python3
+
+      import argparse
+
+      def main(args):
+
+      	if args.prefix != '':
+      		prefix = '%s%s' % (args.prefix, args.delimiter)
+      	else:
+      		prefix = ''
+
+      	if args.postfix != '':
+      		postfix = '%s%s' % (args.delimiter, args.postfix)
+      	else:
+      		postfix = ''
+
+      	if args.fasta != '' and args.fasta[:7] != 'NO_FILE':
+      		process_fasta(args.fasta, prefix, postfix)
+      	
+      	if args.gtf != '' and args.gtf[:7] != 'NO_FILE':
+      		process_gtf(args.gtf, prefix, postfix)
+
+      def process_fasta(input_file, prefix, postfix):
+      	
+      	output = []
+
+      	with open(input_file) as infile:
+      		for line in infile:
+      			if line[0] == '>':
+      				output.append('>%s%s%s' % (prefix, line[1:].rstrip(), postfix))
+      			else:
+      				output.append(line.rstrip())
+
+      	with open('genome.fa', 'w') as out:
+      		out.write('\n'.join(output)) 
+
+      def process_gtf(input_file, prefix, postfix):
+
+      	output = []
+
+      	with open(input_file) as infile:
+      		for line in infile:
+      			if line[0] != '#':
+      				cur = line.rstrip().split('\t')
+      				chrom = '%s%s%s' % (prefix, cur[0], postfix)
+      				output.append('%s\t%s' % (chrom, '\t'.join(cur[1:])))
+
+      	with open('annotation.gtf', 'w') as out:
+      		out.write('\n'.join(output)) 
+
+      def parseArguments():
+      	parser = argparse.ArgumentParser(prog="edit_chromosomes.py", description='', usage='%(prog)s [options]')
+      	
+      	input_args = parser.add_argument_group('Input')
+      	input_args.add_argument('-f', '--fasta', default='', help='Name of fasta file.', metavar='', dest='fasta')
+      	input_args.add_argument('-g', '--gtf', default='', help='Name of gtf file.', metavar='', dest='gtf')
+      	input_args.add_argument('-p', '--prefix', default='', help='Prefix to add to chromosome names.', metavar='', dest='prefix')
+      	input_args.add_argument('-q', '--postfix', default='', help='Postfix to add to chromosome names.', metavar='', dest='postfix')
+      	input_args.add_argument('-d', '--delimiter', default='_', help='Delimiter.', metavar='', dest='delimiter')
+      	return parser.parse_args()
+
+      if __name__ == "__main__":
+      	args = parseArguments()
+      	main(args)
+      //~@:~
+
+      //~@:~
+      @~:"nextflow.config"
+      //~@:~
+      nextflow.enable.dsl=2
+      $INITIAL_RUN_TYPE="gzip"
+
+      params.genome = "" //* @input @optional @label:"Genome (.fa) [Optional]" @single_file
+      params.annotation = "" //* @input @optional @label:"Annotation (.gtf) [Optional]" @single_file
+
+      //* autofill
+      if ($HOSTNAME == "default"){
+          $DOCKER_IMAGE = "quay.io/viascientific/pipeline_base_image:1.0"
+      }
+      //* autofill
+      //~@:~
+  main_g:
+    - 1.009993314743042
+    - -0.009993338957428932
+    - 1.333754301071167
+    - 1501
+    - 842.219
+pins:
+  p1:
+    process_uuid: fe0wlfa2ks51x9hddipxwkxrlo3kem
+    process_rev_uuid: f2ppx4r3auo6o4x6729zviuwn9vbtw
+    content_hash: sha256:ab69822d70d9f7a20e4d54c1bbe9abf452455f726e6cb6553f434e12c7bff389
+    repo_path: edit-chromosome-names-fe0fa251
+    tag: foundry/edit-chromosome-names-fe0fa251/rev-0
+nodes:
+  g-0:
+    x: 357.9296569824219
+    y: 187.59439086914062
+    label: edit_chromosome_names
+    settings: {}
+    process: p1
+  g-1:
+    x: 229.95339965820312
+    y: 113.38330078125
+    label: genome
+    settings: {}
+    io: in
+  g-2:
+    x: 231.4678955078125
+    y: 261.80548095703125
+    label: annotation
+    settings: {}
+    io: in
+  g-3:
+    x: 493.47845458984375
+    y: 117.1695785522461
+    label: edited_chromosomes
+    settings: {}
+    io: out
+  g-4:
+    x: 498.0220031738281
+    y: 251.20387268066406
+    label: edited_chromosomes
+    settings: {}
+    io: out
+edges:
+  - from:
+      node: g-1
+      slot: 1
+    to:
+      node: g-0
+      port: fasta
+  - from:
+      node: g-2
+      slot: 1
+    to:
+      node: g-0
+      port: gtfFile
+  - from:
+      node: g-0
+      port: fasta__12574
+    to:
+      node: g-3
+      slot: 1
+  - from:
+      node: g-0
+      port: gtfFile__12575
+    to:
+      node: g-4
+      slot: 1
