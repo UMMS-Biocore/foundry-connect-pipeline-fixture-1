@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "edit_chromosome_names outputs",
+  "type": "object",
+  "properties": {
+    "fasta__12574": {
+      "type": "string"
+    },
+    "gtfFile__12575": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fasta__12574",
+    "gtfFile__12575"
+  ],
+  "additionalProperties": false
+}

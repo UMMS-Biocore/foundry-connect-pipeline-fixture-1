@@ -1,0 +1,104 @@
+schema_version: 1.1.0
+process:
+  name: edit_chromosome_names
+  summary: Add a prefix and/or postfix to the chromosome names of a genome (.fa) and/or annotation (.gtf).
+  script:
+    language: sh
+    header: |-
+      //* autofill
+      if ($HOSTNAME == "default"){
+          $CPU  = 1
+          $MEMORY = 15
+      }
+      //* platform
+      //* platform
+      //* autofill
+    body: |-
+      container "python:3.9.19-alpine"
+
+      script:
+      	
+      prefix = "" //* @input @label:"Prefix", @description:"Prefix to add before chromosome name."
+      postfix = "" //* @input @label:"Postfix", @description:"Postfix to add after chromosome name."
+      delimiter = "_" //* @input @label:"Delimiter", @description:"Delimiter to use between prefix/postfix and chromosome name."
+
+      """
+      edit_chromosome.py --fasta ${genome} --gtf ${annotation} --prefix ${prefix} --postfix ${postfix} --delimiter ${delimiter}
+
+      """
+inputs:
+  - id: fasta
+    role: input
+    type: string
+    cardinality: single
+    required: false
+    artifact:
+      kind: file
+      file_type: fasta
+  - id: gtfFile
+    role: input
+    type: string
+    cardinality: single
+    required: false
+    artifact:
+      kind: file
+      file_type: gtf
+outputs:
+  - id: fasta__12574
+    role: output
+    type: string
+    cardinality: single
+    required: true
+    artifact:
+      kind: file
+      file_type: fasta
+  - id: gtfFile__12575
+    role: output
+    type: string
+    cardinality: single
+    required: true
+    artifact:
+      kind: file
+      file_type: gtf
+orchestration:
+  nextflow:
+    backend_version: unspecified
+    directives: {}
+    ports:
+      fasta:
+        role: input
+        qualifier: file
+        channel_decl: genome
+        operator: ''
+        closure: ''
+        reg_ex: ''
+      gtfFile:
+        role: input
+        qualifier: file
+        channel_decl: annotation
+        operator: ''
+        closure: ''
+        reg_ex: ''
+      fasta__12574:
+        role: output
+        qualifier: file
+        channel_decl: '"genome.fa"'
+        operator: ''
+        closure: ''
+        reg_ex: ''
+      gtfFile__12575:
+        role: output
+        qualifier: file
+        channel_decl: '"annotation.fa"'
+        operator: ''
+        closure: ''
+        reg_ex: ''
+x-via-fidelity:
+  source: legacy-lift
+  generator_version: contract-lift-1.1.0
+  level: strict
+  notes:
+    - duplicate port id "fasta" in outputs disambiguated to "fasta__12574"
+    - duplicate port id "gtfFile" in outputs disambiguated to "gtfFile__12575"
+    - 'nextflow backend_version unspecified: legacy processes carry no version'
+  ports: {}

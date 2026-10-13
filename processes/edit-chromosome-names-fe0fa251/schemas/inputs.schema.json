@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "edit_chromosome_names inputs",
+  "type": "object",
+  "properties": {
+    "fasta": {
+      "type": "string"
+    },
+    "gtfFile": {
+      "type": "string"
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}
